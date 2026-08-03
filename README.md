@@ -43,57 +43,6 @@ Car-Price-Predictor/
 ├── README.md
 └── assets/
     └── images/
-```
-
----
-
-## 🚀 Installation
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/Car-Price-Predictor.git
-```
-
-### 2. Navigate to the project
-
-```bash
-cd Car-Price-Predictor
-```
-
-### 3. Create a virtual environment (Optional)
-
-**Windows**
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-**Linux/macOS**
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 4. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 5. Run the application
-
-```bash
-streamlit run app.py
-```
-
-or
-
-```bash
-python -m streamlit run app.py
-```
 
 ---
 
@@ -215,11 +164,11 @@ This project is licensed under the MIT License.
 
 **Your Name**
 
-GitHub: https://github.com/your-username
+GitHub: https://github.com/louhan-018
 
-LinkedIn: https://linkedin.com/in/your-profile
+LinkedIn: https://linkedin.com/in/louhan-rout-821135316
 
-Email: your-email@example.com
+Email: louhanrout9876@gmail.com
 
 ---
 

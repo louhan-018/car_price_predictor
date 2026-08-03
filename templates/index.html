@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Car Price Predictor</title>
+</head>
+
+<body>
+
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg w-100" style="max-width: 720px;">
+
+        <div class="card-header text-center text-white">
+            <h2 class="mb-0">🚗 Car Price Predictor</h2>
+            <p class="mb-0">AI-based Used Car Price Estimation</p>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form method="POST" autocomplete="off">
+
+                <!-- Company -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Company</label>
+                    <select class="form-select" id="company" name="company" required onchange="loadCarModels()">
+                        <option value="" selected disabled>Select company</option>
+                        {% for company in companies %}
+                        <option value="{{ company }}">{{ company }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Model -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Car Model</label>
+                    <select class="form-select" id="car_model" name="car_model" required>
+                        <option value="" selected disabled>Select model</option>
+                    </select>
+                </div>
+
+                <!-- Year -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Year</label>
+                    <select class="form-select" name="year" required>
+                        <option value="" selected disabled>Select year</option>
+                        {% for y in years %}
+                        <option value="{{ y }}">{{ y }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Fuel -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Fuel Type</label>
+                    <select class="form-select" name="fuel_type" required>
+                        <option value="" selected disabled>Select fuel type</option>
+                        {% for fuel in fuel_type %}
+                        <option value="{{ fuel }}">{{ fuel }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- KM -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Kilometers Driven</label>
+                    <input type="number" class="form-control" name="kilo_driven"
+                           placeholder="e.g. 45000" required>
+                </div>
+
+                <button type="button" class="btn w-100 fw-bold" onclick="send_Data()">
+                    Predict Price
+                </button>
+            </form>
+
+            <div class="text-center">
+                <span id="prediction"></span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const carModels = {{ car_models | tojson }};
+
+    function loadCarModels() {
+        const company = document.getElementById("company").value;
+        const modelSelect = document.getElementById("car_model");
+
+        modelSelect.innerHTML = '<option disabled selected>Select model</option>';
+
+        if (carModels[company]) {
+            carModels[company].forEach(model => {
+                const option = document.createElement("option");
+                option.value = model;
+                option.textContent = model;
+                modelSelect.appendChild(option);
+            });
+        }
+    }
+
+    function send_Data() {
+        event.preventDefault();
+
+        const form = document.querySelector("form");
+        const fd = new FormData(form);
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/predict", true);
+        document.getElementById("prediction").innerHTML = "⏳ Predicting price...";
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    document.getElementById("prediction").innerHTML =
+                        "💰 Estimated Price: ₹ " + xhr.responseText;
+                } else {
+                    document.getElementById("prediction").innerHTML =
+                        "❌ Error predicting price";
+                }
+            }
+        };
+
+        xhr.send(fd);
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
